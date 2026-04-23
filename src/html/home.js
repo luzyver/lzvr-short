@@ -4,295 +4,387 @@ export function getHomeHTML() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fast, free URL shortener. Create short links in seconds with LZVR Short.">
+  <meta name="theme-color" content="#faf9f6">
   <title>LZVR Short — Simplify Your Links</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-body: #F4F7F9;
-      --bg-surface: #FFFFFF;
-      --primary: #3B82F6;
-      --primary-hover: #2563EB;
-      --primary-light: #EFF6FF;
-      --text-main: #1E293B;
-      --text-secondary: #64748B;
-      --text-muted: #94A3B8;
-      --border: #E2E8F0;
-      --input-bg: #FFFFFF;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
-      --success: #10B981;
-      --success-light: #ECFDF5;
-      --danger: #EF4444;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     html { height: 100%; }
+
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(180deg, #FFFFFF 0%, #F4F7F9 50%, #EEF2F6 100%);
-      color: var(--text-main);
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      background: #faf9f6;
+      color: #111111;
       min-height: 100%;
       display: flex;
       flex-direction: column;
-      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffff;
+      border-bottom: 1px solid #dedbd6;
+      height: 56px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-inner {
+      max-width: 560px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #111111;
+      text-decoration: none;
+    }
+    .nav-logo .accent { color: #ff5600; }
+    .nav-admin {
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-size: 14px;
+      color: #626260;
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+    .nav-admin:hover { border-color: #dedbd6; }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
     main {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 60px 24px 40px;
-      max-width: 600px;
-      margin: 0 auto;
+      max-width: 560px;
       width: 100%;
+      margin: 0 auto;
+      padding: 80px 24px 64px;
     }
-    .hero {
-      text-align: center;
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #ff5600;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -2px;
+      color: #111111;
+      margin-bottom: 20px;
+    }
+    h1 .dot { color: #ff5600; }
+    .hero-sub {
+      font-size: 16px;
+      color: #626260;
+      line-height: 1.5;
       margin-bottom: 48px;
     }
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 3.5rem);
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 12px;
-      letter-spacing: -0.03em;
+
+    /* ── FORM CARD ────────────────────────────────────────── */
+    .form-card {
+      background: #ffffff;
+      border: 1px solid #dedbd6;
+      border-radius: 8px;
+      padding: 24px;
     }
-    .hero h1 span {
-      color: var(--primary);
-    }
-    .hero p {
-      font-size: 1.125rem;
-      color: var(--text-secondary);
-      font-weight: 400;
-    }
-    .form-section {
-      margin-bottom: 32px;
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-group label {
+
+    .field-label {
       display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
+      color: #7b7b78;
+      margin-bottom: 6px;
     }
-    input, select {
+
+    .input-field {
+      display: block;
       width: 100%;
-      padding: 16px 20px;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      color: var(--text-main);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.95rem;
-      transition: all 0.2s ease;
-      box-shadow: var(--shadow);
-    }
-    input:focus, select:focus {
+      padding: 12px 14px;
+      background: #faf9f6;
+      border: 1px solid #dedbd6;
+      border-radius: 4px;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-size: 15px;
+      color: #111111;
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+      box-shadow: none;
+      transition: border-color 0.15s ease;
     }
-    input::placeholder {
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    select {
-      cursor: pointer;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .btn {
-      padding: 16px 32px;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    .input-field:focus { border-color: #111111; }
+    .input-field::placeholder { color: #9c9fa5; }
+    select.input-field { cursor: pointer; }
+
+    /* Advanced toggle */
+    .advanced-toggle {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-top: 14px;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-size: 13px;
+      color: #7b7b78;
+      cursor: pointer;
+      transition: color 0.15s ease;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      width: 100%;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    .advanced-toggle:hover { color: #111111; }
+    .chevron {
+      display: inline-block;
+      font-size: 11px;
+      line-height: 1;
+      transition: transform 0.2s ease;
     }
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-      transform: translateY(-2px);
-    }
-    .btn-primary:active {
-      transform: translateY(0);
-    }
-    .btn-copy {
-      background: var(--primary);
-      color: white;
-      padding: 10px 20px;
-      font-size: 0.875rem;
-      box-shadow: none;
-    }
-    .btn-copy:hover {
-      background: var(--primary-hover);
-    }
-    .result {
+    .advanced-toggle.open .chevron { transform: rotate(180deg); }
+
+    /* Advanced section */
+    .advanced-section {
       display: none;
-      background: var(--success-light);
-      border: 1px solid #A7F3D0;
-      border-radius: 12px;
-      padding: 20px 24px;
-      margin-top: 24px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
     }
-    .result.show {
+    .advanced-section.open { display: grid; }
+    .advanced-section .input-field { font-size: 14px; }
+
+    /* Divider */
+    .form-divider {
+      border: none;
+      border-top: 1px solid #dedbd6;
+      margin: 20px 0;
+    }
+
+    /* Submit button */
+    .btn-submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 44px;
+      background: #111111;
+      color: #ffffff;
+      border: 1px solid #111111;
+      border-radius: 4px;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    }
+    .btn-submit:hover:not([disabled]) {
+      background: #ffffff;
+      color: #111111;
+      border-color: #111111;
+      transform: scale(1.03);
+    }
+    .btn-submit:active:not([disabled]) { transform: scale(0.85); }
+    .btn-submit[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+    /* Spinner */
+    .spinner {
+      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+    }
+    .btn-submit:hover .spinner {
+      border-color: rgba(17, 17, 17, 0.2);
+      border-top-color: #111111;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESULT BOX ───────────────────────────────────────── */
+    .result-box {
+      display: none;
+      margin-top: 16px;
+      border: 1px solid #dedbd6;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .result-box.show {
       display: block;
-      animation: fadeIn 0.3s ease;
+      animation: resultIn 0.22s ease forwards;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes resultIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     .result-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 12px;
+      background: #faf9f6;
+      border-bottom: 1px solid #dedbd6;
+      padding: 10px 14px;
     }
-    .result-header svg {
-      width: 18px;
-      height: 18px;
-      color: #059669;
+    .result-dot {
+      flex-shrink: 0;
+      width: 8px;
+      height: 8px;
+      background: #ff5600;
+      border-radius: 50%;
     }
-    .result-header span {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #059669;
+    .result-header-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      color: #7b7b78;
     }
-    .result-url {
+    .result-body {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 12px;
-      background: white;
-      border-radius: 8px;
-      padding: 12px 16px;
+      background: #ffffff;
+      padding: 12px 14px;
     }
-    .result-url span {
+    .result-url {
+      flex: 1;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.95rem;
-      color: #047857;
+      font-size: 14px;
+      color: #111111;
       word-break: break-all;
-      font-weight: 500;
     }
-    .info-text {
+    .btn-copy {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 12px;
+      background: transparent;
+      color: #111111;
+      border: 1px solid #dedbd6;
+      border-radius: 4px;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.1s ease;
+      white-space: nowrap;
+    }
+    .btn-copy:hover { border-color: #111111; transform: scale(1.1); }
+    .btn-copy:active { transform: scale(0.85); }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid #dedbd6;
+      padding: 20px 24px;
       text-align: center;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 20px;
     }
-    .info-text strong {
-      color: var(--text-secondary);
-      font-weight: 600;
+    .footer-copy {
+      font-size: 12px;
+      color: #9c9fa5;
     }
+
+    /* ── TOAST ────────────────────────────────────────────── */
     .toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      padding: 14px 20px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      color: var(--text-main);
-      font-size: 0.9rem;
-      font-weight: 500;
-      box-shadow: var(--shadow-lg);
-      transform: translateX(120%);
-      transition: transform 0.3s ease;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      z-index: 999;
+      background: #111111;
+      color: #ffffff;
+      font-size: 13px;
+      border-radius: 4px;
+      padding: 12px 16px;
+      max-width: 300px;
+      opacity: 0;
+      transform: translateY(80px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      pointer-events: none;
     }
-    .toast::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      background: var(--success);
-      border-radius: 50%;
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
     }
-    .toast.show { transform: translateX(0); }
-    .toast.error { border-color: var(--danger); }
-    .toast.error::before { background: var(--danger); }
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border);
-      background: var(--bg-surface);
-    }
-    .footer-content {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .footer-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
+    .toast.error { background: #c41c1c; }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
     @media (max-width: 600px) {
-      main { padding: 40px 20px 32px; }
-      .form-row { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 2rem; }
-      .hero { margin-bottom: 36px; }
-      input, select { padding: 14px 16px; }
+      main { padding: 48px 16px 48px; }
+      h1 { font-size: 40px; letter-spacing: -1.5px; }
+      .advanced-section { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <div class="hero">
-      <h1>LZVR <span>Short</span></h1>
-      <p>Simplify your links. Fast, free, and reliable.</p>
-    </div>
 
-    <div class="form-section">
-      <form id="shortenForm">
-        <div class="form-group">
-          <label for="url">Paste your long URL</label>
-          <input type="url" id="url" placeholder="https://example.com/your-very-long-url-here" required />
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="customSlug">Custom alias (optional)</label>
-            <input type="text" id="customSlug" placeholder="my-link" pattern="[a-zA-Z0-9-_]+" />
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="/">LZVR<span class="accent">.</span></a>
+      <button class="nav-admin" id="adminLink">Admin &rarr;</button>
+    </div>
+  </nav>
+
+  <main>
+    <p class="eyebrow">URL Shortener</p>
+    <h1>Short links,<br>instantly<span class="dot">.</span></h1>
+    <p class="hero-sub">Paste any long URL and get a clean, shareable short link in seconds.</p>
+
+    <div class="form-card">
+      <form id="shortenForm" autocomplete="off">
+        <label class="field-label" for="urlInput">Destination URL</label>
+        <input
+          class="input-field"
+          type="url"
+          id="urlInput"
+          placeholder="https://example.com/your-very-long-url-here"
+          required
+          spellcheck="false"
+        />
+
+        <button type="button" class="advanced-toggle" id="advancedToggle">
+          <span class="chevron">&#9662;</span>
+          Advanced options
+        </button>
+
+        <div class="advanced-section" id="advancedSection">
+          <div>
+            <label class="field-label" for="customSlug">Custom alias</label>
+            <input
+              class="input-field"
+              type="text"
+              id="customSlug"
+              placeholder="my-link"
+              pattern="[a-zA-Z0-9\\-_]+"
+              spellcheck="false"
+            />
           </div>
-          <div class="form-group">
-            <label for="expiresIn">Link expiration</label>
-            <select id="expiresIn">
-              <option value="">Never expires</option>
+          <div>
+            <label class="field-label" for="expiresIn">Expiration</label>
+            <select class="input-field" id="expiresIn">
+              <option value="">Never</option>
               <option value="3600">1 Hour</option>
               <option value="86400">1 Day</option>
               <option value="604800">1 Week</option>
@@ -300,214 +392,155 @@ export function getHomeHTML() {
             </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-          </svg>
-          Shorten URL
-        </button>
+
+        <hr class="form-divider">
+
+        <button type="submit" class="btn-submit" id="submitBtn">Shorten URL</button>
       </form>
-      
-      <div class="result" id="result">
+
+      <div class="result-box" id="resultBox">
         <div class="result-header">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-          <span>Your short link is ready</span>
+          <span class="result-dot"></span>
+          <span class="result-header-label">Your Short Link</span>
         </div>
-        <div class="result-url">
-          <span id="shortUrl"></span>
-          <button class="btn btn-copy" onclick="copyUrl()">Copy</button>
+        <div class="result-body">
+          <span class="result-url" id="shortUrlText"></span>
+          <button class="btn-copy" onclick="copyUrl()">Copy</button>
         </div>
       </div>
-
-      <p class="info-text" id="remainingInfo">
-        Free to use — up to <strong>5 links</strong> per day
-      </p>
     </div>
   </main>
 
   <footer>
-    <div class="footer-content">
-      <p class="footer-text">© 2025 LZVR Short. All rights reserved.</p>
-    </div>
+    <p class="footer-copy">&copy; 2025 LZVR Short</p>
   </footer>
 
   <div class="toast" id="toast"></div>
 
   <script>
     const SESSION_KEY = 'ts_session_token';
-    let browserFingerprint = null;
 
+    /* ── Session helpers ──────────────────────────────────── */
     function handleSessionToken() {
       const params = new URLSearchParams(window.location.search);
       const token = params.get('_ts');
       if (token) {
-        try { 
-          localStorage.setItem(SESSION_KEY, token);
-        } catch(e) {}
+        try { localStorage.setItem(SESSION_KEY, token); } catch (e) {}
+        window.history.replaceState({}, '', '/');
       }
     }
 
     function getSessionToken() {
-      try { return localStorage.getItem(SESSION_KEY); } catch(e) { return null; }
+      try { return localStorage.getItem(SESSION_KEY); } catch (e) { return null; }
     }
 
-    async function generateFingerprint() {
-      const FP_KEY = 'lzvr_fp';
-      function getStored() {
-        try { const v = localStorage.getItem(FP_KEY); if (v && v.length >= 16) return v; } catch(e) {}
-        try { const v = sessionStorage.getItem(FP_KEY); if (v && v.length >= 16) return v; } catch(e) {}
-        return null;
-      }
-      function saveFingerprint(fp) {
-        try { localStorage.setItem(FP_KEY, fp); } catch(e) {}
-        try { sessionStorage.setItem(FP_KEY, fp); } catch(e) {}
-      }
-      const stored = getStored();
-      if (stored) return stored;
-      let fingerprint;
-      try {
-        const components = [];
-        components.push(screen.width + 'x' + screen.height);
-        components.push(screen.colorDepth || 24);
-        components.push(window.devicePixelRatio || 1);
-        try { components.push(Intl.DateTimeFormat().resolvedOptions().timeZone); } catch(e) { components.push('tz-unknown'); }
-        components.push(navigator.language || 'en');
-        components.push(navigator.platform || 'unknown');
-        components.push(navigator.hardwareConcurrency || 0);
-        components.push(navigator.userAgent || 'unknown');
-        try {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            canvas.width = 200;
-            canvas.height = 50;
-            ctx.textBaseline = 'top';
-            ctx.font = '14px Arial';
-            ctx.fillStyle = '#f60';
-            ctx.fillRect(0, 0, 100, 50);
-            ctx.fillStyle = '#069';
-            ctx.fillText('Fingerprint', 2, 15);
-            components.push(canvas.toDataURL().slice(-50));
-          }
-        } catch (e) {}
-        try {
-          const canvas = document.createElement('canvas');
-          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-          if (gl) {
-            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-            if (debugInfo) {
-              components.push(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || 'gpu');
-            }
-          }
-        } catch (e) {}
-        const data = components.join('|');
-        if (crypto && crypto.subtle) {
-          const encoder = new TextEncoder();
-          const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(data));
-          const hashArray = Array.from(new Uint8Array(hashBuffer));
-          fingerprint = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        } else {
-          let hash = 0;
-          for (let i = 0; i < data.length; i++) {
-            const char = data.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-          }
-          fingerprint = Math.abs(hash).toString(16).padStart(32, '0');
-        }
-      } catch (e) {
-        fingerprint = 'fp-' + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-      }
-      saveFingerprint(fingerprint);
-      return fingerprint;
+    /* ── Advanced toggle ──────────────────────────────────── */
+    function toggleAdvanced() {
+      const section = document.getElementById('advancedSection');
+      const toggle  = document.getElementById('advancedToggle');
+      const chevron = toggle.querySelector('.chevron');
+      const isOpen  = section.classList.toggle('open');
+      toggle.classList.toggle('open', isOpen);
+      chevron.innerHTML = isOpen ? '&#9652;' : '&#9662;';
     }
 
-    async function checkRemaining() {
-      if (!browserFingerprint) {
-        document.getElementById('remainingInfo').innerHTML = 'Free to use — up to <strong>5 links</strong> per day';
-        return;
-      }
-      try {
-        const headers = { 'Content-Type': 'application/json' };
-        const token = getSessionToken();
-        if (token) headers['X-Session-Token'] = token;
-        const response = await fetch('/api/remaining', {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({ fingerprint: browserFingerprint })
-        });
-        if (response.ok) {
-          const data = await response.json();
-          document.getElementById('remainingInfo').innerHTML = 
-            'You have <strong>' + data.remaining + '</strong> of ' + data.limit + ' links remaining today';
-        }
-      } catch (e) {
-        document.getElementById('remainingInfo').innerHTML = 'Free to use — up to <strong>5 links</strong> per day';
-      }
-    }
+    document.getElementById('advancedToggle').addEventListener('click', toggleAdvanced);
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      handleSessionToken();
-      browserFingerprint = await generateFingerprint();
-      await checkRemaining();
-    });
-
-    function showToast(message, isError = false) {
+    /* ── Toast ────────────────────────────────────────────── */
+    function showToast(message, isError) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
       toast.className = 'toast show' + (isError ? ' error' : '');
-      setTimeout(() => { toast.className = 'toast'; }, 3000);
+      setTimeout(function () { toast.className = 'toast'; }, 3000);
     }
 
-    document.getElementById('shortenForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const url = document.getElementById('url').value;
-      const customSlug = document.getElementById('customSlug').value;
-      const expiresIn = document.getElementById('expiresIn').value;
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.innerHTML = '<span class="loading"></span>';
-      btn.disabled = true;
+    /* ── Copy URL ─────────────────────────────────────────── */
+    function copyUrl() {
+      const text = document.getElementById('shortUrlText').textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(function () { showToast('Link copied to clipboard!'); })
+          .catch(function () { fallbackCopy(text); });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const el = document.createElement('textarea');
+      el.value = text;
+      el.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+      document.body.appendChild(el);
+      el.focus();
+      el.select();
       try {
-        const headers = { 'Content-Type': 'application/json' };
-        const token = getSessionToken();
-        if (token) headers['X-Session-Token'] = token;
-        const response = await fetch('/api/shorten', {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            url,
-            customSlug: customSlug || undefined,
-            expiresIn: expiresIn ? parseInt(expiresIn) : undefined,
-            fingerprint: browserFingerprint
-          })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Failed to shorten URL');
-        document.getElementById('shortUrl').textContent = data.shortUrl;
-        document.getElementById('result').classList.add('show');
-        const remainingMsg = data.remaining !== undefined ? ' (' + data.remaining + ' remaining today)' : '';
-        showToast('Short link created!' + remainingMsg);
-        if (data.remaining !== undefined) {
-          document.getElementById('remainingInfo').innerHTML = 
-            'You have <strong>' + data.remaining + '</strong> of 5 links remaining today';
-        }
-        document.getElementById('url').value = '';
-        document.getElementById('customSlug').value = '';
-        document.getElementById('expiresIn').value = '';
-      } catch (error) {
-        showToast(error.message, true);
-      } finally {
-        btn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg> Shorten URL';
-        btn.disabled = false;
+        document.execCommand('copy');
+        showToast('Link copied to clipboard!');
+      } catch (e) {
+        showToast('Could not copy \u2014 please copy manually', true);
+      }
+      document.body.removeChild(el);
+    }
+
+    /* ── Admin link ───────────────────────────────────────── */
+    document.getElementById('adminLink').addEventListener('click', function () {
+      const token = getSessionToken();
+      if (token) {
+        window.location.href = '/admin?_ts=' + encodeURIComponent(token);
+      } else {
+        window.location.href = '/admin';
       }
     });
 
-    function copyUrl() {
-      navigator.clipboard.writeText(document.getElementById('shortUrl').textContent);
-      showToast('Link copied to clipboard!');
-    }
+    /* ── Form submit ──────────────────────────────────────── */
+    document.getElementById('shortenForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const urlVal     = document.getElementById('urlInput').value;
+      const customSlug = document.getElementById('customSlug').value;
+      const expiresIn  = document.getElementById('expiresIn').value;
+      const btn        = document.getElementById('submitBtn');
+
+      btn.innerHTML = '<span class="spinner"></span> Shortening...';
+      btn.disabled  = true;
+
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        const token   = getSessionToken();
+        if (token) headers['X-Session-Token'] = token;
+
+        const payload = { url: urlVal };
+        if (customSlug) payload.customSlug = customSlug;
+        if (expiresIn)  payload.expiresIn  = parseInt(expiresIn, 10);
+
+        const response = await fetch('/api/shorten', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Failed to shorten URL');
+
+        document.getElementById('shortUrlText').textContent = data.shortUrl;
+        document.getElementById('resultBox').classList.add('show');
+        showToast('Short link created!');
+
+        document.getElementById('urlInput').value   = '';
+        document.getElementById('customSlug').value = '';
+        document.getElementById('expiresIn').value  = '';
+      } catch (err) {
+        showToast(err.message, true);
+      } finally {
+        btn.innerHTML = 'Shorten URL';
+        btn.disabled  = false;
+      }
+    });
+
+    /* ── Boot ─────────────────────────────────────────────── */
+    document.addEventListener('DOMContentLoaded', function () {
+      handleSessionToken();
+    });
   </script>
 </body>
 </html>`;

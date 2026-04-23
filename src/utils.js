@@ -1,5 +1,3 @@
-export const RATE_LIMIT_MAX = 5;
-export const RATE_LIMIT_WINDOW = 86400;
 export const MAX_PAYLOAD_SIZE = 10 * 1024;
 export const MAX_URL_LENGTH = 2048;
 export const MAX_SLUG_LENGTH = 50;
@@ -18,16 +16,6 @@ export function generateSlug(length = 6) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;
-}
-
-export function getTodayKey() {
-  return new Date().toISOString().split('T')[0];
-}
-
-export function getClientIP(request) {
-  return request.headers.get('CF-Connecting-IP') || 
-         request.headers.get('X-Real-IP') || 
-         'unknown';
 }
 
 export function validateSlug(slug) {
@@ -78,39 +66,6 @@ export async function parseJsonBody(request) {
   } catch {
     return { error: 'Invalid JSON', status: 400 };
   }
-}
-
-export async function checkRateLimit(fingerprint, ip, env) {
-  const today = getTodayKey();
-  
-  if (ip && ip !== 'unknown') {
-    const ipKey = `ratelimit:ip:${ip}:${today}`;
-    const ipCount = await env.LINKS.get(ipKey);
-    const ipUsage = ipCount ? parseInt(ipCount) : 0;
-    
-    if (ipUsage >= RATE_LIMIT_MAX * 3) {
-      return { allowed: false, remaining: 0, error: 'Too many requests from this network' };
-    }
-    
-    await env.LINKS.put(ipKey, (ipUsage + 1).toString(), { expirationTtl: RATE_LIMIT_WINDOW });
-  }
-  
-  if (!fingerprint) {
-    return { allowed: false, remaining: 0, error: 'Fingerprint required' };
-  }
-  
-  const rateLimitKey = `ratelimit:fp:${fingerprint}:${today}`;
-  const currentCount = await env.LINKS.get(rateLimitKey);
-  const count = currentCount ? parseInt(currentCount) : 0;
-  
-  if (count >= RATE_LIMIT_MAX) {
-    return { allowed: false, remaining: 0, count };
-  }
-  
-  const newCount = count + 1;
-  await env.LINKS.put(rateLimitKey, newCount.toString(), { expirationTtl: RATE_LIMIT_WINDOW });
-  
-  return { allowed: true, remaining: RATE_LIMIT_MAX - newCount, count: newCount };
 }
 
 export const corsHeaders = {

@@ -1,13 +1,9 @@
 import { 
   verifyApiKey, 
   generateSlug, 
-  checkRateLimit, 
-  getTodayKey,
-  getClientIP,
   validateSlug,
   validateUrl,
   parseJsonBody,
-  RATE_LIMIT_MAX,
   corsHeaders 
 } from './utils.js';
 import { get404HTML } from './html/404.js';
@@ -21,22 +17,7 @@ export async function handleShorten(request, env) {
     });
   }
   
-  const { url, customSlug, expiresIn, fingerprint } = parsed.data;
-  const clientIP = getClientIP(request);
-
-  const rateLimit = await checkRateLimit(fingerprint, clientIP, env);
-  if (!rateLimit.allowed) {
-    return new Response(
-      JSON.stringify({ 
-        error: rateLimit.error || 'Rate limit exceeded. Maximum 5 links per day.',
-        remaining: 0
-      }), 
-      {
-        status: 429,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
-  }
+  const { url, customSlug, expiresIn } = parsed.data;
 
   const urlValidation = validateUrl(url);
   if (!urlValidation.valid) {
@@ -46,7 +27,7 @@ export async function handleShorten(request, env) {
     });
   }
 
-  let slug = customSlug || generateSlug();
+  let slug;
 
   if (customSlug) {
     if (!validateSlug(customSlug)) {
@@ -55,14 +36,25 @@ export async function handleShorten(request, env) {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    
-    const existing = await env.LINKS.get(slug);
+
+    const existing = await env.LINKS.get(customSlug);
     if (existing) {
       return new Response(JSON.stringify({ error: 'Slug already exists' }), {
         status: 409,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    slug = customSlug;
+  } else {
+    // Auto-generate slug with collision retry (up to 5 attempts)
+    let attempts = 0;
+    do {
+      slug = generateSlug();
+      const existing = await env.LINKS.get(slug);
+      if (!existing) break;
+      attempts++;
+    } while (attempts < 5);
   }
 
   const linkData = {
@@ -89,11 +81,14 @@ export async function handleShorten(request, env) {
       originalUrl: url,
       createdAt: linkData.createdAt,
       expiresAt: linkData.expiresAt || null,
-      remaining: rateLimit.remaining,
     }),
     {
       status: 201,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store',
+      },
     }
   );
 }
@@ -126,11 +121,15 @@ export async function handleListLinks(request, env) {
     });
   }
 
-  const list = await env.LINKS.list();
+  // Explicitly request the maximum page size.
+  // NOTE: If list.list_complete === false, there are more keys beyond this page.
+  // Full pagination across cursor pages is not implemented here; for stores
+  // with more than 1000 keys a cursor-based loop would be required.
+  const list = await env.LINKS.list({ limit: 1000 });
   const links = [];
 
   for (const key of list.keys) {
-    if (key.name.startsWith('ratelimit:') || key.name.startsWith('session:')) continue;
+    if (key.name.startsWith('session:')) continue;
     
     const data = await env.LINKS.get(key.name);
     if (data) {
@@ -176,43 +175,6 @@ export async function handleDelete(request, env, path) {
   return new Response(JSON.stringify({ success: true, deleted: slug }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
-}
-
-export async function handleCheckRemaining(request, env) {
-  const parsed = await parseJsonBody(request);
-  if (parsed.error) {
-    return new Response(JSON.stringify({ error: parsed.error }), {
-      status: parsed.status,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  }
-  
-  const { fingerprint } = parsed.data;
-  
-  if (!fingerprint) {
-    return new Response(JSON.stringify({ error: 'Fingerprint required' }), {
-      status: 400,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  }
-  
-  const today = getTodayKey();
-  const rateLimitKey = `ratelimit:fp:${fingerprint}:${today}`;
-  
-  const currentCount = await env.LINKS.get(rateLimitKey);
-  const count = currentCount ? parseInt(currentCount) : 0;
-  const remaining = Math.max(0, RATE_LIMIT_MAX - count);
-  
-  return new Response(
-    JSON.stringify({
-      used: count,
-      remaining,
-      limit: RATE_LIMIT_MAX,
-    }),
-    {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    }
-  );
 }
 
 export async function handleStats(request, env, path) {

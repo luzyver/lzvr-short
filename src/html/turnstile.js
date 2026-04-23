@@ -4,129 +4,134 @@ export function getTurnstileHTML(siteKey) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify — LZVR Short</title>
+  <meta name="robots" content="noindex, nofollow">
+  <title>Verify &mdash; LZVR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-body: #F4F7F9;
-      --bg-surface: #FFFFFF;
-      --primary: #3B82F6;
-      --text-main: #1E293B;
-      --text-secondary: #64748B;
-      --text-muted: #94A3B8;
-      --border: #E2E8F0;
-      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
-      --success: #10B981;
-      --danger: #EF4444;
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-body);
-      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #faf9f6;
+      color: #111111;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
     }
-    .container {
-      text-align: center;
-      padding: 48px 40px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: var(--shadow-lg);
-      max-width: 420px;
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #dedbd6;
+      border-radius: 8px;
+      padding: 40px 32px;
+      max-width: 380px;
       width: 100%;
+      text-align: center;
     }
+
     .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text-main);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #111111;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+
+    .logo-dot {
+      color: #ff5600;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #7b7b78;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: -0.6px;
+      line-height: 1.00;
+      color: #111111;
       margin-bottom: 8px;
     }
-    .logo span {
-      color: var(--primary);
+
+    .subtext {
+      font-size: 13px;
+      color: #626260;
+      margin-bottom: 28px;
+      line-height: 1.4;
     }
-    h2 {
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-    }
+
     .turnstile-wrapper {
       display: flex;
       justify-content: center;
-      margin-bottom: 24px;
     }
+
     .status {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-top: 16px;
-      font-weight: 500;
+      font-size: 13px;
+      min-height: 20px;
+      margin-top: 10px;
     }
-    .status.success { color: var(--success); }
-    .status.error { color: var(--danger); }
-    .loading {
-      display: none;
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 20px auto;
+
+    .status.verifying { color: #626260; }
+    .status.success   { color: #2c7a4b; }
+    .status.error     { color: #c41c1c; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #dedbd6;
+      margin: 24px 0 16px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .shield-icon {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto 20px;
-      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .shield-icon svg {
-      width: 28px;
-      height: 28px;
-      stroke: var(--primary);
+
+    .footer-note {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #9c9fa5;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="shield-icon">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-      </svg>
-    </div>
-    <div class="logo">LZVR<span>.</span></div>
-    <h2>Please verify you're human</h2>
+  <div class="card">
+    <div class="logo">LZVR<span class="logo-dot">.</span></div>
+    <div class="eyebrow">Security Check</div>
+    <h1>Verify you&rsquo;re human</h1>
+    <p class="subtext">Complete the challenge below to continue.</p>
     <div class="turnstile-wrapper">
-      <div class="cf-turnstile" 
-           data-sitekey="${siteKey}" 
+      <div class="cf-turnstile"
+           data-sitekey="${siteKey}"
            data-callback="onVerify"
            data-theme="light">
       </div>
     </div>
-    <div class="loading" id="loading"></div>
     <p class="status" id="status"></p>
+    <hr class="divider">
+    <div class="footer-note">Protected by Cloudflare Turnstile</div>
   </div>
 
   <script>
     const SESSION_KEY = 'ts_session_token';
-    
+
     function onVerify(token) {
       const status = document.getElementById('status');
-      const loading = document.getElementById('loading');
-      
       status.textContent = 'Verifying...';
-      status.className = 'status';
-      loading.style.display = 'block';
+      status.className = 'status verifying';
 
       fetch('/api/turnstile/verify', {
         method: 'POST',
@@ -136,16 +141,11 @@ export function getTurnstileHTML(siteKey) {
       })
       .then(res => res.json())
       .then(data => {
-        loading.style.display = 'none';
         if (data.success) {
-          let tokenStored = false;
           if (data.sessionToken) {
-            try {
-              localStorage.setItem(SESSION_KEY, data.sessionToken);
-              tokenStored = localStorage.getItem(SESSION_KEY) === data.sessionToken;
-            } catch(e) {}
+            try { localStorage.setItem(SESSION_KEY, data.sessionToken); } catch(e) {}
           }
-          status.textContent = 'Verified! Redirecting...';
+          status.textContent = 'Verified. Redirecting...';
           status.className = 'status success';
           setTimeout(() => {
             let redirect = data.redirect || '/';
@@ -153,18 +153,17 @@ export function getTurnstileHTML(siteKey) {
               redirect += (redirect.includes('?') ? '&' : '?') + '_ts=' + data.sessionToken;
             }
             window.location.href = redirect;
-          }, 500);
+          }, 600);
         } else {
           status.textContent = data.error || 'Verification failed. Please try again.';
           status.className = 'status error';
-          turnstile.reset();
+          if (typeof turnstile !== 'undefined') turnstile.reset();
         }
       })
-      .catch(err => {
-        loading.style.display = 'none';
-        status.textContent = 'Error occurred. Please try again.';
+      .catch(() => {
+        status.textContent = 'An error occurred. Please try again.';
         status.className = 'status error';
-        turnstile.reset();
+        if (typeof turnstile !== 'undefined') turnstile.reset();
       });
     }
   </script>
