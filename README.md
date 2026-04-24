@@ -17,6 +17,7 @@ URL shortener berbasis `Bun`, `Hono`, dan `Redis`.
 - Click tracking
 - Admin panel dengan API key
 - Cloudflare Turnstile support
+- Turnstile verification per slug selama 1 jam
 - Session fallback via cookie, query param, dan header
 - Dockerized app runtime
 
@@ -123,6 +124,13 @@ Response:
 `GET /:slug`
 
 Redirect ke URL tujuan dan menambah click counter.
+
+Perilaku Turnstile untuk short link:
+
+- setiap slug punya status verify sendiri
+- slug yang sudah diverifikasi bisa diakses ulang tanpa challenge selama 1 jam
+- slug lain tetap harus verify terpisah
+- crawler preview yang dikenal tetap dibypass
 
 `POST /api/turnstile/verify`
 

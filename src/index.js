@@ -132,7 +132,7 @@ app.get('/:slug', async (c) => {
 
   // Skip Turnstile for known link-preview bots so OG metadata works
   if (!isCrawler(c.req.raw)) {
-    const challenge = await requireTurnstile(c.req.raw, env)
+    const challenge = await requireTurnstile(c.req.raw, env, { requireFreshPathGrant: true })
     if (challenge) return wrapWithHtmlHeaders(challenge)
   }
 

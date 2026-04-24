@@ -12,6 +12,7 @@ function sanitizeRedirect(redirect) {
 const SESSION_DURATION = 60 * 60;
 const SESSION_COOKIE_NAME = 'ts_session';
 const SESSION_HEADER_NAME = 'X-Session-Token';
+const SESSION_KEY_PREFIX = 'session:';
 
 export function generateSessionId() {
   const array = new Uint8Array(32);
@@ -32,19 +33,63 @@ export function getSessionFromRequest(request) {
   return match ? match[1] : null;
 }
 
+function getSessionKey(sessionId) {
+  return `${SESSION_KEY_PREFIX}${sessionId}`;
+}
+
+async function getSessionRecord(sessionId, env) {
+  if (!sessionId) return null;
+  if (!/^[a-f0-9]{64}$/.test(sessionId)) return null;
+
+  const raw = await env.LINKS.get(getSessionKey(sessionId));
+  if (!raw) return null;
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object') {
+      return parsed;
+    }
+  } catch {}
+
+  // Backward compatibility for older plain-string session values.
+  return { createdAt: Number(raw) || Date.now(), verifiedPaths: {} };
+}
+
+async function saveSessionRecord(sessionId, env, session) {
+  await env.LINKS.put(getSessionKey(sessionId), JSON.stringify(session), {
+    expirationTtl: SESSION_DURATION
+  });
+}
+
 export async function isSessionValid(sessionId, env) {
-  if (!sessionId) return false;
-  if (!/^[a-f0-9]{64}$/.test(sessionId)) return false;
-  const session = await env.LINKS.get(`session:${sessionId}`);
+  const session = await getSessionRecord(sessionId, env);
   return session !== null;
 }
 
-export async function createSession(env) {
+export async function createSession(env, verifiedPath = null) {
   const sessionId = generateSessionId();
-  await env.LINKS.put(`session:${sessionId}`, Date.now().toString(), {
-    expirationTtl: SESSION_DURATION
+  await saveSessionRecord(sessionId, env, {
+    createdAt: Date.now(),
+    verifiedPaths: verifiedPath ? { [verifiedPath]: Date.now() } : {},
   });
   return sessionId;
+}
+
+async function grantVerifiedPath(env, sessionId, verifiedPath) {
+  const session = await getSessionRecord(sessionId, env);
+  const nextSession = session || {
+    createdAt: Date.now(),
+    verifiedPaths: {},
+  };
+
+  const verifiedPaths = nextSession.verifiedPaths && typeof nextSession.verifiedPaths === 'object'
+    ? nextSession.verifiedPaths
+    : {};
+
+  verifiedPaths[verifiedPath] = Date.now();
+  nextSession.verifiedPaths = verifiedPaths;
+
+  await saveSessionRecord(sessionId, env, nextSession);
 }
 
 export function getSessionCookie(sessionId) {
@@ -109,8 +154,11 @@ export async function handleTurnstileVerify(request, env) {
   const outcome = await result.json();
 
   if (outcome.success) {
-    const sessionId = await createSession(env);
     const safeRedirect = sanitizeRedirect(redirect);
+    const existingSessionId = getSessionFromRequest(request);
+    const hasValidSession = await isSessionValid(existingSessionId, env);
+    const sessionId = hasValidSession ? existingSessionId : await createSession(env);
+    await grantVerifiedPath(env, sessionId, safeRedirect);
     return new Response(JSON.stringify({ success: true, redirect: safeRedirect, sessionToken: sessionId }), {
       headers: {
         ...corsHeaders,
@@ -126,13 +174,43 @@ export async function handleTurnstileVerify(request, env) {
   });
 }
 
-export async function requireTurnstile(request, env) {
+async function hasVerifiedPathGrant(request, env, sessionId) {
+  const session = await getSessionRecord(sessionId, env);
+  if (!session) return false;
+
+  const url = new URL(request.url);
+  const verifiedPaths = session.verifiedPaths && typeof session.verifiedPaths === 'object'
+    ? session.verifiedPaths
+    : {};
+  const verifiedAt = verifiedPaths[url.pathname];
+  if (!verifiedAt) return false;
+
+  if ((Date.now() - verifiedAt) > SESSION_DURATION * 1000) {
+    delete verifiedPaths[url.pathname];
+    session.verifiedPaths = verifiedPaths;
+    await saveSessionRecord(sessionId, env, session);
+    return false;
+  }
+
+  return true;
+}
+
+export async function requireTurnstile(request, env, options = {}) {
   if (!env.TURNSTILE_SITE_KEY || !env.TURNSTILE_SECRET_KEY) {
     return null;
   }
 
   const sessionId = getSessionFromRequest(request);
   const valid = await isSessionValid(sessionId, env);
+
+  if (options.requireFreshPathGrant) {
+    const granted = valid ? await hasVerifiedPathGrant(request, env, sessionId) : false;
+    if (!granted) {
+      const url = new URL(request.url);
+      return handleTurnstilePage(env, url.pathname);
+    }
+    return null;
+  }
 
   if (!valid) {
     const url = new URL(request.url);
