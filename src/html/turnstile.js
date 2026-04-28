@@ -20,9 +20,7 @@ export function getTurnstileHTML(siteKey, redirectPath = '/') {
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
-      background:
-        radial-gradient(circle at 18% 18%, rgba(255, 86, 0, 0.17), transparent 30%),
-        linear-gradient(135deg, #fffaf2 0%, #faf9f6 48%, #eeece6 100%);
+      background: #faf9f6;
       color: #111111;
       min-height: 100vh;
       min-height: 100svh;
@@ -35,12 +33,11 @@ export function getTurnstileHTML(siteKey, redirectPath = '/') {
     .card {
       background: #ffffff;
       border: 1px solid #dedbd6;
-      border-radius: 20px;
+      border-radius: 8px;
       padding: clamp(34px, 5vw, 58px) clamp(26px, 4vw, 44px);
       max-width: 460px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 28px 70px rgba(17, 17, 17, 0.10);
     }
 
     .logo {

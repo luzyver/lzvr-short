@@ -17,9 +17,7 @@ export function getHomeHTML() {
 
     body {
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(255, 86, 0, 0.16), transparent 30%),
-        linear-gradient(135deg, #fffaf2 0%, #faf9f6 45%, #f0eee8 100%);
+      background: #faf9f6;
       color: #111111;
       min-height: 100vh;
       min-height: 100svh;
@@ -33,18 +31,17 @@ export function getHomeHTML() {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(18px);
+      background: #ffffff;
       border-bottom: 1px solid #dedbd6;
       height: 56px;
       display: flex;
       align-items: center;
     }
     .nav-inner {
-      max-width: 1240px;
+      max-width: 1440px;
       width: 100%;
       margin: 0 auto;
-      padding: 0 clamp(18px, 4vw, 56px);
+      padding: 0 clamp(20px, 5vw, 80px);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -73,52 +70,109 @@ export function getHomeHTML() {
     /* ── MAIN ─────────────────────────────────────────────── */
     main {
       flex: 1;
-      max-width: 1240px;
+      max-width: 1440px;
       width: 100%;
       margin: 0 auto;
-      padding: clamp(48px, 7vw, 96px) clamp(18px, 4vw, 56px);
+      padding: clamp(40px, 6vw, 80px) clamp(20px, 5vw, 80px);
       min-height: calc(100svh - 56px - 61px);
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.8fr);
+      grid-template-columns: minmax(0, 1.18fr) minmax(380px, 0.82fr);
       align-items: center;
-      gap: clamp(32px, 7vw, 96px);
+      gap: clamp(40px, 8vw, 120px);
     }
 
     /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      min-width: 0;
+    }
     .eyebrow {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 400;
       text-transform: uppercase;
       letter-spacing: 1.2px;
       color: #ff5600;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
     h1 {
-      font-size: 52px;
+      font-size: clamp(56px, 7.6vw, 108px);
       font-weight: 400;
       line-height: 1.00;
-      letter-spacing: -2px;
+      letter-spacing: clamp(-3.2px, -0.22vw, -1.6px);
       color: #111111;
-      margin-bottom: 20px;
-      max-width: 680px;
+      margin-bottom: 28px;
+      max-width: 760px;
     }
     h1 .dot { color: #ff5600; }
     .hero-sub {
-      font-size: 16px;
+      font-size: clamp(17px, 1.4vw, 20px);
       color: #626260;
       line-height: 1.5;
-      margin-bottom: 48px;
-      max-width: 520px;
+      max-width: 620px;
+    }
+    .hero-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 620px;
+      margin-top: clamp(42px, 6vw, 72px);
+      border: 1px solid #dedbd6;
+      background: #dedbd6;
+    }
+    .hero-strip-item {
+      background: #faf9f6;
+      padding: 16px;
+    }
+    .hero-strip-value {
+      display: block;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: -0.48px;
+      color: #111111;
+      margin-bottom: 8px;
+    }
+    .hero-strip-label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7b7b78;
     }
 
     /* ── FORM CARD ────────────────────────────────────────── */
+    .shortener-panel {
+      min-width: 0;
+    }
     .form-card {
-      background: #ffffff;
+      background: #faf9f6;
       border: 1px solid #dedbd6;
-      border-radius: 18px;
-      padding: clamp(22px, 3vw, 34px);
-      box-shadow: 0 28px 70px rgba(17, 17, 17, 0.10);
+      border-radius: 8px;
+      padding: clamp(24px, 3vw, 40px);
+    }
+    .form-kicker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #dedbd6;
+    }
+    .form-title {
+      font-size: 32px;
+      line-height: 1;
+      letter-spacing: -0.96px;
+      font-weight: 400;
+      color: #111111;
+    }
+    .form-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7b7b78;
+      white-space: nowrap;
     }
 
     .field-label {
@@ -312,7 +366,7 @@ export function getHomeHTML() {
       border-top: 1px solid #dedbd6;
       padding: 20px 24px;
       text-align: center;
-      background: rgba(255, 255, 255, 0.55);
+      background: #ffffff;
     }
     .footer-copy {
       font-size: 12px;
@@ -348,9 +402,14 @@ export function getHomeHTML() {
       main {
         grid-template-columns: 1fr;
         min-height: auto;
-        padding: 48px 16px 48px;
+        padding: 40px 16px 48px;
       }
-      h1 { font-size: 40px; letter-spacing: -1.5px; }
+      h1 { font-size: 48px; letter-spacing: -1.6px; }
+      .hero-strip { grid-template-columns: 1fr; }
+      .form-kicker {
+        align-items: flex-start;
+        flex-direction: column;
+      }
       .advanced-section { grid-template-columns: 1fr; }
     }
 
@@ -372,11 +431,32 @@ export function getHomeHTML() {
   </nav>
 
   <main>
-    <p class="eyebrow">URL Shortener</p>
-    <h1>Short links,<br>instantly<span class="dot">.</span></h1>
-    <p class="hero-sub">Paste any long URL and get a clean, shareable short link in seconds.</p>
+    <section class="hero" aria-labelledby="home-title">
+      <p class="eyebrow">URL Shortener</p>
+      <h1 id="home-title">Short links,<br>instantly<span class="dot">.</span></h1>
+      <p class="hero-sub">Paste any long URL and get a clean, shareable short link in seconds.</p>
+      <div class="hero-strip" aria-label="Service highlights">
+        <div class="hero-strip-item">
+          <span class="hero-strip-value">TTL</span>
+          <span class="hero-strip-label">Expiring Links</span>
+        </div>
+        <div class="hero-strip-item">
+          <span class="hero-strip-value">API</span>
+          <span class="hero-strip-label">Admin Control</span>
+        </div>
+        <div class="hero-strip-item">
+          <span class="hero-strip-value">TS</span>
+          <span class="hero-strip-label">Turnstile Guard</span>
+        </div>
+      </div>
+    </section>
 
-    <div class="form-card">
+    <section class="shortener-panel" aria-label="Create a short link">
+      <div class="form-card">
+        <div class="form-kicker">
+          <h2 class="form-title">Create link</h2>
+          <span class="form-badge">No signup</span>
+        </div>
       <form id="shortenForm" autocomplete="off">
         <label class="field-label" for="urlInput">Destination URL</label>
         <input
@@ -433,6 +513,7 @@ export function getHomeHTML() {
         </div>
       </div>
     </div>
+    </section>
   </main>
 
   <footer>

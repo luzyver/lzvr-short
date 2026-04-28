@@ -15,9 +15,7 @@ export function getAdminHTML() {
 
     body {
       font-family: 'Inter', ui-sans-serif, system-ui;
-      background:
-        radial-gradient(circle at 90% 8%, rgba(255, 86, 0, 0.13), transparent 28%),
-        linear-gradient(135deg, #fffaf2 0%, #faf9f6 46%, #eeece6 100%);
+      background: #faf9f6;
       color: #111111;
       min-height: 100vh;
       min-height: 100svh;
@@ -29,8 +27,7 @@ export function getAdminHTML() {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(255, 255, 255, 0.84);
-      backdrop-filter: blur(18px);
+      background: #ffffff;
       height: 56px;
       border-bottom: 1px solid #dedbd6;
     }
@@ -103,10 +100,9 @@ export function getAdminHTML() {
     .card {
       background: #ffffff;
       border: 1px solid #dedbd6;
-      border-radius: 16px;
+      border-radius: 8px;
       margin-bottom: 16px;
       overflow: hidden;
-      box-shadow: 0 22px 54px rgba(17, 17, 17, 0.07);
     }
     .card-header {
       padding: 14px 20px;
@@ -221,9 +217,8 @@ export function getAdminHTML() {
     .stat-card {
       background: #ffffff;
       border: 1px solid #dedbd6;
-      border-radius: 16px;
+      border-radius: 8px;
       padding: 20px;
-      box-shadow: 0 18px 45px rgba(17, 17, 17, 0.06);
     }
     .stat-value {
       font-size: 32px;
