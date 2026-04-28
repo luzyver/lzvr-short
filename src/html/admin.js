@@ -15,9 +15,12 @@ export function getAdminHTML() {
 
     body {
       font-family: 'Inter', ui-sans-serif, system-ui;
-      background: #faf9f6;
+      background:
+        radial-gradient(circle at 90% 8%, rgba(255, 86, 0, 0.13), transparent 28%),
+        linear-gradient(135deg, #fffaf2 0%, #faf9f6 46%, #eeece6 100%);
       color: #111111;
       min-height: 100vh;
+      min-height: 100svh;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -26,14 +29,15 @@ export function getAdminHTML() {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(18px);
       height: 56px;
       border-bottom: 1px solid #dedbd6;
     }
     .nav-inner {
-      max-width: 960px;
+      max-width: none;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 clamp(18px, 3vw, 44px);
       height: 100%;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -71,9 +75,10 @@ export function getAdminHTML() {
 
     /* ── CONTAINER ── */
     .container {
-      max-width: 960px;
+      max-width: none;
       margin: 0 auto;
-      padding: 40px 24px;
+      padding: clamp(28px, 4vw, 56px) clamp(18px, 3vw, 44px);
+      min-height: calc(100svh - 56px);
     }
 
     /* ── PAGE HEADER ── */
@@ -98,9 +103,10 @@ export function getAdminHTML() {
     .card {
       background: #ffffff;
       border: 1px solid #dedbd6;
-      border-radius: 8px;
+      border-radius: 16px;
       margin-bottom: 16px;
       overflow: hidden;
+      box-shadow: 0 22px 54px rgba(17, 17, 17, 0.07);
     }
     .card-header {
       padding: 14px 20px;
@@ -215,8 +221,9 @@ export function getAdminHTML() {
     .stat-card {
       background: #ffffff;
       border: 1px solid #dedbd6;
-      border-radius: 8px;
+      border-radius: 16px;
       padding: 20px;
+      box-shadow: 0 18px 45px rgba(17, 17, 17, 0.06);
     }
     .stat-value {
       font-size: 32px;

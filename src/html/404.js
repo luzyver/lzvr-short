@@ -18,18 +18,21 @@ export function get404HTML() {
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
-      background: #faf9f6;
+      background:
+        radial-gradient(circle at 80% 16%, rgba(255, 86, 0, 0.16), transparent 30%),
+        linear-gradient(135deg, #fffaf2 0%, #faf9f6 48%, #eeece6 100%);
       color: #111111;
       min-height: 100vh;
+      min-height: 100svh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: clamp(20px, 5vw, 72px);
     }
 
     .wrapper {
       text-align: center;
-      max-width: 400px;
+      max-width: 520px;
       width: 100%;
     }
 
@@ -47,10 +50,11 @@ export function get404HTML() {
     .card {
       background: #ffffff;
       border: 1px solid #dedbd6;
-      border-radius: 8px;
-      padding: 32px;
+      border-radius: 20px;
+      padding: clamp(32px, 5vw, 52px);
       position: relative;
       z-index: 1;
+      box-shadow: 0 28px 70px rgba(17, 17, 17, 0.10);
     }
 
     .eyebrow {
