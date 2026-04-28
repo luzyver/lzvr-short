@@ -110,34 +110,50 @@ export function getHomeHTML() {
       line-height: 1.5;
       max-width: 620px;
     }
-    .hero-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1px;
+    .hero-preview {
       max-width: 620px;
       margin-top: clamp(42px, 6vw, 72px);
       border: 1px solid #dedbd6;
-      background: #dedbd6;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
     }
-    .hero-strip-item {
+    .hero-preview-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       background: #faf9f6;
-      padding: 16px;
+      border-bottom: 1px solid #dedbd6;
+      padding: 10px 14px;
     }
-    .hero-strip-value {
-      display: block;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: -0.48px;
-      color: #111111;
-      margin-bottom: 8px;
+    .hero-preview-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff5600;
+      flex-shrink: 0;
     }
-    .hero-strip-label {
-      display: block;
+    .hero-preview-label span:last-child {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 1px;
       color: #7b7b78;
+    }
+    .hero-preview-url {
+      display: block;
+      padding: 16px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.15;
+      color: #111111;
+      word-break: break-all;
+    }
+    .hero-note {
+      margin-top: 14px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #626260;
     }
 
     /* ── FORM CARD ────────────────────────────────────────── */
@@ -405,7 +421,6 @@ export function getHomeHTML() {
         padding: 40px 16px 48px;
       }
       h1 { font-size: 48px; letter-spacing: -1.6px; }
-      .hero-strip { grid-template-columns: 1fr; }
       .form-kicker {
         align-items: flex-start;
         flex-direction: column;
@@ -435,20 +450,14 @@ export function getHomeHTML() {
       <p class="eyebrow">URL Shortener</p>
       <h1 id="home-title">Short links,<br>instantly<span class="dot">.</span></h1>
       <p class="hero-sub">Paste any long URL and get a clean, shareable short link in seconds.</p>
-      <div class="hero-strip" aria-label="Service highlights">
-        <div class="hero-strip-item">
-          <span class="hero-strip-value">TTL</span>
-          <span class="hero-strip-label">Expiring Links</span>
+      <div class="hero-preview" aria-label="Example short link">
+        <div class="hero-preview-label">
+          <span class="hero-preview-dot"></span>
+          <span>Preview</span>
         </div>
-        <div class="hero-strip-item">
-          <span class="hero-strip-value">API</span>
-          <span class="hero-strip-label">Admin Control</span>
-        </div>
-        <div class="hero-strip-item">
-          <span class="hero-strip-value">TS</span>
-          <span class="hero-strip-label">Turnstile Guard</span>
-        </div>
+        <span class="hero-preview-url">lzvr.biz.id/launch</span>
       </div>
+      <p class="hero-note">Custom aliases, expiring links, and click tracking included.</p>
     </section>
 
     <section class="shortener-panel" aria-label="Create a short link">
