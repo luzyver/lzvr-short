@@ -7,6 +7,7 @@ URL shortener berbasis `Bun`, `Hono`, dan `Redis`.
 - Bun untuk runtime JavaScript
 - Hono untuk routing HTTP
 - Redis untuk penyimpanan link dan session
+- DevCycle untuk remote app config dan feature flags
 - Docker Compose untuk menjalankan app + Redis
 
 ## Features
@@ -38,17 +39,30 @@ src/
     └── turnstile.js
 ```
 
-## Environment Variables
+## Configuration
 
 Copy `.env.example` ke `.env`, lalu isi sesuai kebutuhan.
+Env hanya dipakai untuk bootstrap runtime/infrastruktur. Config app dibaca dari DevCycle.
 
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `PORT` | No | Port internal app. Default `3000` |
 | `REDIS_URL` | Yes | URL Redis |
-| `ADMIN_API_KEY` | Yes | API key untuk endpoint admin |
-| `TURNSTILE_SITE_KEY` | No | Site key Turnstile |
-| `TURNSTILE_SECRET_KEY` | No | Secret key Turnstile |
+| `DEVCYCLE_SERVER_SDK_KEY` | Yes | Server SDK key DevCycle |
+
+### DevCycle Variables
+
+Buat variable berikut di DevCycle. Key harus sama persis:
+
+| Variable Key | Type | Default | Description |
+|--------------|------|---------|-------------|
+| `admin-api-key` | String | `""` | API key untuk endpoint admin |
+| `turnstile-enabled` | Boolean | `false` | Enable/disable Cloudflare Turnstile |
+| `turnstile-site-key` | String | `""` | Site key Turnstile |
+| `turnstile-secret-key` | String | `""` | Secret key Turnstile |
+
+Jika DevCycle belum terkonfigurasi atau variable belum tersedia, app memakai safe defaults:
+admin API tidak bisa dipakai dan Turnstile nonaktif.
 
 ## Local Run
 

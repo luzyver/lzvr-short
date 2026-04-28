@@ -133,7 +133,7 @@ export async function handleTurnstileVerify(request, env) {
     });
   }
 
-  const secretKey = env.TURNSTILE_SECRET_KEY;
+  const secretKey = env.TURNSTILE_ENABLED ? env.TURNSTILE_SECRET_KEY : '';
   if (!secretKey) {
     return new Response(JSON.stringify({ success: false, error: 'Turnstile not configured' }), {
       status: 500,
@@ -196,7 +196,7 @@ async function hasVerifiedPathGrant(request, env, sessionId) {
 }
 
 export async function requireTurnstile(request, env, options = {}) {
-  if (!env.TURNSTILE_SITE_KEY || !env.TURNSTILE_SECRET_KEY) {
+  if (!env.TURNSTILE_ENABLED || !env.TURNSTILE_SITE_KEY || !env.TURNSTILE_SECRET_KEY) {
     return null;
   }
 
